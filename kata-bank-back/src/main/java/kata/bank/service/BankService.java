@@ -4,5 +4,6 @@ import kata.bank.entity.Account;
 
 public interface BankService {
     Account getAccount(String accountNumber);
-    boolean deposit(String accountNumber,double amount);
+    Account deposit(String accountNumber, double amount);
+    Account withDraw(String accountNumber, double amount);
 }

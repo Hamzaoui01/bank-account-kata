@@ -24,10 +24,20 @@ public class BankController {
     }
 
     @PostMapping("operations/debit")
-    public ResponseEntity<Boolean> debitAccount(@RequestBody OperationDTO operationDTO){
+    public ResponseEntity<Account> debitAccount(@RequestBody OperationDTO operationDTO){
         if (operationDTO.getAmount()<=0) return new ResponseEntity(HttpStatus.BAD_REQUEST);
         try{
             return new ResponseEntity<>(bankService.deposit(operationDTO.getAccountNumber(), operationDTO.getAmount()),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("operations/credit")
+    public ResponseEntity<Account> creditAccount(@RequestBody OperationDTO operationDTO){
+        if (operationDTO.getAmount()<=0) return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        try{
+            return new ResponseEntity<>(bankService.withDraw(operationDTO.getAccountNumber(), operationDTO.getAmount()),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }

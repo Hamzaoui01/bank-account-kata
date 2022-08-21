@@ -3,6 +3,7 @@ package kata.bank.service;
 import kata.bank.entity.Account;
 import kata.bank.entity.Operation;
 import kata.bank.exceptions.AccountNotFoundException;
+import kata.bank.exceptions.InsufficientBalanceException;
 import kata.bank.repository.AccountRepository;
 import kata.bank.repository.OperationRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
+import static kata.bank.enums.OperationType.CREDIT;
 import static kata.bank.enums.OperationType.DEBIT;
 
 @Service
@@ -27,7 +29,7 @@ public class BankServiceImpl implements BankService{
 
     @Override
     @Transactional
-    public boolean deposit(String accountNumber, double amount) {
+    public Account deposit(String accountNumber, double amount) {
         Account account = getAccount(accountNumber);
             operationRepository.save(Operation.builder()
                     .account(account)
@@ -35,8 +37,20 @@ public class BankServiceImpl implements BankService{
                     .type(DEBIT.getCode())
                     .dateTime(LocalDateTime.now())
                     .build());
-            accountRepository.save(Account.builder().number(accountNumber).balance(account.getBalance()+amount).build());
-            return true;
+            return accountRepository.save(Account.builder().number(accountNumber).balance(account.getBalance()+amount).build());
+    }
+
+    @Override
+    public Account withDraw(String accountNumber, double amount) {
+        Account account = getAccount(accountNumber);
+        if(account.getBalance()<amount) throw new InsufficientBalanceException();
+        operationRepository.save(Operation.builder()
+                .account(account)
+                .amount(amount)
+                .type(CREDIT.getCode())
+                .dateTime(LocalDateTime.now())
+                .build());
+        return accountRepository.save(Account.builder().number(accountNumber).balance(account.getBalance()-amount).build());
     }
 
 }
