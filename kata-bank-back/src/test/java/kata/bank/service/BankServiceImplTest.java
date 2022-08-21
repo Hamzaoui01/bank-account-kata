@@ -39,6 +39,7 @@ class BankServiceImplTest {
     void init(){
         accountRepository.save(Account.builder().number("001").build());
         accountRepository.save(Account.builder().number("003").balance(INITIAL_BALANCE).build());
+        accountRepository.save(Account.builder().number("004").build());
     }
 
     @Test
@@ -97,5 +98,17 @@ class BankServiceImplTest {
 
         assertThat(operations.size()-initialSize).isEqualTo(1);
         assertThat(operations.get(initialSize).getType()).isEqualTo(CREDIT.getCode());
+    }
+
+    @Test
+    void Should_Retrieve_All_Operations_When_Give_Account_Number(){
+        String accountNumber = "004";
+        List<Operation> operations = bankService.getOperations(accountNumber);
+        assertThat(operations.size()).isZero();
+        bankService.deposit(accountNumber,200);
+        bankService.deposit(accountNumber,200);
+        bankService.withDraw(accountNumber,200);
+        operations = bankService.getOperations(accountNumber);
+        assertThat(operations.size()).isEqualTo(3);
     }
 }

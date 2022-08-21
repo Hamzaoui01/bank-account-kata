@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static kata.bank.enums.OperationType.CREDIT;
 import static kata.bank.enums.OperationType.DEBIT;
@@ -51,6 +52,11 @@ public class BankServiceImpl implements BankService{
                 .dateTime(LocalDateTime.now())
                 .build());
         return accountRepository.save(Account.builder().number(accountNumber).balance(account.getBalance()-amount).build());
+    }
+
+    @Override
+    public List<Operation> getOperations(String accountNumber) {
+        return operationRepository.findByAccount(getAccount(accountNumber));
     }
 
 }

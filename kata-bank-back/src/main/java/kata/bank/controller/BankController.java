@@ -2,6 +2,7 @@ package kata.bank.controller;
 
 import kata.bank.controller.dto.OperationDTO;
 import kata.bank.entity.Account;
+import kata.bank.repository.OperationRepository;
 import kata.bank.service.BankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class BankController {
 
     private final BankService bankService;
+    private final OperationRepository operationRepository;
 
     @GetMapping("accounts/{number}")
     public ResponseEntity<Account> getAccount(@PathVariable String number){
@@ -38,6 +40,15 @@ public class BankController {
         if (operationDTO.getAmount()<=0) return new ResponseEntity(HttpStatus.BAD_REQUEST);
         try{
             return new ResponseEntity<>(bankService.withDraw(operationDTO.getAccountNumber(), operationDTO.getAmount()),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("operations/account/{number}")
+    public ResponseEntity<Account> getOperations(@PathVariable String number){
+        try{
+            return new ResponseEntity<>(bankService.getAccount(number),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
