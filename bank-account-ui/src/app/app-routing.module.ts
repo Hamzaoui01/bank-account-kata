@@ -6,6 +6,7 @@ import { OperationComponent } from './operation/operation.component';
 const routes: Routes = [
   {path:'operation/debit',component:OperationComponent},
   {path:'operation/credit',component:OperationComponent},
+  {path:'accounts/:number',component:AccountComponent},
   {path:'accounts',component:AccountComponent}
 ];
 

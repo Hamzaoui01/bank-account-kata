@@ -28,13 +28,13 @@ export class OperationComponent implements OnInit {
 
     if(this.isDebit()){
       this.bankOperationService.depositMoney(formValues.number,formValues.amount).subscribe({
-        next: (v) => {this.router.navigate(["/accounts"])},
+        next: (v) => {this.router.navigate(["/accounts",formValues.number])},
         error: (e) => {console.error(e)}
       });
     }
     else{
       this.bankOperationService.withdrawMoney(formValues.number,formValues.amount).subscribe({
-        next: (v) => {this.router.navigate(["/accounts"])},
+        next: (v) => {this.router.navigate(["/accounts",formValues.number])},
         error: (e) => {console.error(e)}
       });
     }
