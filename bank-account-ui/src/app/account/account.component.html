@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-md-3">
+    <div class="card">
+      <div class="card-header">
+        Account List
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <thead class="table-dark">
+            <tr>
+              <th>Account Number</th>
+              <th>Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let account of accounts" (click)="selectAccount(account.number)">
+              <td>{{account.number}}</td>
+              <td>{{account.balance}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="card">
+      <div class="card-header">
+        Account Informations
+      </div>
+      <div class="card-body">
+        <span class="fw-bold">Account Number: </span>
+        <p class="fw-normal">{{selectedAccount.number}}</p>
+        <span class="fw-bold">Account Balance: </span>
+        <p class="fw-normal">{{selectedAccount.balance}} DH</p>
+        <table class="table">
+          <thead class="table-dark">
+            <tr>
+              <th colspan="2">transaction history</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let op of selectedAccount.operations"  [ngStyle]="{'background-color': (op.type=='D') ? '#cffcc7' : '#f9caca'}" >
+              <td>{{op.dateTime | date :"dd/MM/yyyy  HH:mm"}}</td>
+              <td>{{(op.type=='D')?"+":"-"}} {{op.amount}} DH</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
