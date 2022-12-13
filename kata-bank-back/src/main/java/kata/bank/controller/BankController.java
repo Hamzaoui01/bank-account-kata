@@ -4,6 +4,7 @@ import kata.bank.controller.dto.OperationDTO;
 import kata.bank.repository.AccountRepository;
 import kata.bank.service.BankService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin("*")
+@Slf4j
 public class BankController {
 
     private final BankService bankService;
@@ -27,6 +29,7 @@ public class BankController {
 
     @GetMapping("accounts")
     public ResponseEntity getAccounts(){
+
         try{
             return new ResponseEntity<>(accountRepository.findAll(),HttpStatus.OK);
         }catch (Exception e){
